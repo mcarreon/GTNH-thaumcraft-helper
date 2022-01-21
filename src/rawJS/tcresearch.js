@@ -75,6 +75,7 @@ $(function () {
   function push_addons(aspects, combinations) {
     addon_aspects = [];
     addon_array = addon_dictionary;
+
     $.each(addon_dictionary, function (key, addon_info) {
       $("#addons").append(
         '<input type="checkbox" class="addon_toggle" id="' +
@@ -95,7 +96,9 @@ $(function () {
         combinations[combination_name] = combination;
       });
     });
+
     addon_aspects = addon_aspects.sort(aspectSort);
+   
     $.each(addon_aspects, function (number, aspect) {
       aspects.push(aspect);
     });
@@ -260,21 +263,27 @@ $(function () {
 
   function reset_aspects() {
     aspects = $.extend([], version_dictionary[version]["base_aspects"]);
+    
     combinations = $.extend(
       true,
       {},
       version_dictionary[version]["combinations"]
     );
+    
     $("#avail, #addons").empty();
     $("#fromSel,#toSel").select2("destroy");
     $(".addon_toggle").prop("checked", false);
+    
     tier_aspects = [];
+    
     $.each(combinations, function (aspect, value) {
       tier_aspects.push(aspect);
     });
+
     tier_aspects = tier_aspects.sort(aspectSort);
     aspects = aspects.concat(tier_aspects);
     push_addons(aspects, combinations);
+    
     aspects.forEach(function (aspect) {
       $("#avail").append(
         '<li class="aspect" id="' +
@@ -288,12 +297,16 @@ $(function () {
           "</div></li>"
       );
     });
+
+    // TODO
     toggle_addons(addon_aspects);
+    
     var ddData = [];
     aspects.forEach(function (aspect) {
       //I have to use the 'aspect' as 'text' because i need it in the matcher function to access the translated version of it.
       ddData.push({ text: aspect, id: aspect });
     });
+    
     ddData.sort(ddDataSort);
     function format(d) {
       var aspect = d.id;
@@ -309,6 +322,7 @@ $(function () {
         "</div></div>"
       );
     }
+    
     $("#toSel,#fromSel").select2({
       data: ddData,
       formatResult: format,
@@ -328,6 +342,7 @@ $(function () {
         );
       },
     });
+    
     $("#toSel,#fromSel").select2("val", "air");
     graph = {};
     for (compound in combinations) {
